@@ -143,6 +143,7 @@ def trackObjects(cur_detections):
                     cur_coord = [cur["cur_x"], cur["cur_y"]]
                     prev_coord = [tracked["cur_x"], tracked["cur_y"]]
                     if math.dist(cur_coord, prev_coord) <= track_dist_threshold:
+                        tracked["frame_id"] = cur["frame_id"]
                         tracked["prev_x"] = tracked["cur_x"]
                         tracked["prev_y"] = tracked["cur_y"]
                         tracked["cur_x"] = cur["cur_x"]
@@ -172,29 +173,6 @@ def AddToTracked(cur_obj):
     tracked_objects.append(track_obj)
     track_count +=1
 
-
-
-
-
-
-
-def trackObjectsBtnFrames(prev_detections, cur_detections):
-    interframe_objects = []
-    for cur_obj in cur_detections:
-        for prev_obj in prev_detections:
-            if cur_obj.object_type == prev_obj.object_type:
-                cur_coord = [cur_obj.x, cur_obj.y]
-                prev_coord = [prev_obj.x, prev_obj.y]
-                if math.dist(cur_coord, prev_coord) <= track_dist_threshold:
-                    msg = dict.fromkeys(img_obj_keys)
-                    msg["frame_id"] = cur_obj["frame_id"]
-                    msg["cur_x"]= cur_obj["cur_x"]
-                    msg["cur_y"] = cur_obj["cur_x"]
-                    msg["prev_x"] = prev_obj["cur_x"]
-                    msg["prev_y"] = prev_obj["cur_x"]
-                    tracked_objects.append(msg)
-
-    return interframe_objects
 
 
 def main(args):
