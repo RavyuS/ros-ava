@@ -7,4 +7,5 @@ struct VehiclesInfo{
         ava_motion::TrackedVehicleConstPtr lag_veh;
         std::vector<ava_motion::TrackedVehicleConstPtr> left_vehs;
         std::vector<ava_motion::TrackedVehicleConstPtr> right_vehs;
+        double LANE_WIDTH = 4.0; // Metres
 };
