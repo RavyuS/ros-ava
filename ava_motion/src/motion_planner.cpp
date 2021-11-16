@@ -18,6 +18,51 @@ class StateManager{
             /**
             Logic that determines what category tracked vehicle falls in to (Lead vehicle, lag vehicle, or left/right vehicle)
             **/
+
+            // Lead vehicle
+            if(veh->vehicle.location.x > 0 && veh->vehicle.location.y == 0){
+                if (veh_info_.lead_veh){
+                    if(veh->vehicle.location.x >= veh_info_.lead_veh->vehicle.location.x) veh_info_.lead_veh = veh;
+                }
+                else veh_info_.lead_veh = veh;
+            }
+
+            //Lag vehicle
+            else if (veh->vehicle.location.x < 0 && veh->vehicle.location.y == 0){
+                if (veh_info_.lag_veh){
+                    if(veh->vehicle.location.x <= veh_info_.lag_veh->vehicle.location.x) veh_info_.lag_veh = veh;
+                }
+                else veh_info_.lag_veh = veh;
+            }
+
+            //Left vehicle
+            else if (veh->vehicle.location.y < 0){
+                bool set = false;
+                for (auto left_veh : veh_info_.left_vehs){
+                    if (left_veh->id == veh->id){
+                        set = true;
+                        left_veh = veh;
+                        break;
+                    }
+                }
+                if(!set){
+                    veh_info_.left_vehs.push_back(veh);
+                }
+            }
+            //Right vehicle
+            else if (veh->vehicle.location.y > 0){
+                bool set = false;
+                for (auto right_veh : veh_info_.right_vehs){
+                    if (right_veh->id == veh->id){
+                        set = true;
+                        right_veh = veh;
+                        break;
+                    }
+                }
+                if(!set){
+                    veh_info_.right_vehs.push_back(veh);
+                }
+            }
     }
 
     std::string GetCurrentState(){
@@ -35,6 +80,8 @@ class StateManager{
     
     VehiclesInfo veh_info_;
     State* cur_state_ = new KeepLaneState();
+
+   
     
     
 
