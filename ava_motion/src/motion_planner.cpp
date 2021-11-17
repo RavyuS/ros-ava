@@ -23,6 +23,9 @@ class StateManager{
             if(veh->vehicle.location.x > 0 && veh->vehicle.location.y == 0){
                 if (veh_info_.lead_veh){
                     if(veh->vehicle.location.x >= veh_info_.lead_veh->vehicle.location.x) veh_info_.lead_veh = veh;
+                    else if(veh->id == veh_info_.lead_veh->id){
+                        veh_info_.lead_veh = veh;
+                    }
                 }
                 else veh_info_.lead_veh = veh;
             }
@@ -31,6 +34,9 @@ class StateManager{
             else if (veh->vehicle.location.x < 0 && veh->vehicle.location.y == 0){
                 if (veh_info_.lag_veh){
                     if(veh->vehicle.location.x <= veh_info_.lag_veh->vehicle.location.x) veh_info_.lag_veh = veh;
+                    else if(veh->id == veh_info_.lag_veh->id){
+                        veh_info_.lag_veh = veh;
+                    }
                 }
                 else veh_info_.lag_veh = veh;
             }
@@ -71,7 +77,9 @@ class StateManager{
 
     void MotionPlanningLoop(){
         State* new_state = cur_state_->UpdateState(veh_info_);
-        delete cur_state_;
+        if(new_state != cur_state_){ // state change requires memory cleanup
+            delete cur_state_;
+        }
         cur_state_ = new_state;
 
     }
